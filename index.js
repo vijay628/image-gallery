@@ -1,10 +1,9 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 5000;
 const db = require('./db.js');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const imgSchema = require('./model.js');
+const imgSchema = require('./model/model.js');
 const fs = require('fs');
 const path = require('path');
 app.set("view engine", "ejs");
@@ -61,10 +60,10 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
     }
 });
 
-
-app.listen(port, err => {
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, err => {
     if (err) {
         throw err;
     }
-    console.log('Server listening on port', port);
+    console.log('Server listening on port', PORT);
 });
