@@ -1,11 +1,12 @@
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 5000;
 const db = require('./db.js');
 const cors = require('cors');
-var bodyParser = require('body-parser');
-var imgSchema = require('./model.js');
-var fs = require('fs');
-var path = require('path');
+const bodyParser = require('body-parser');
+const imgSchema = require('./model.js');
+const fs = require('fs');
+const path = require('path');
 app.set("view engine", "ejs");
 
 app.use(cors());
@@ -13,9 +14,9 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-var multer = require('multer');
+const multer = require('multer');
 
-var storage = multer.diskStorage({
+const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads');
     },
@@ -24,7 +25,7 @@ var storage = multer.diskStorage({
     }
 });
 
-var upload = multer({ storage: storage });
+const upload = multer({ storage: storage });
 
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -41,7 +42,7 @@ app.get('/api/images', async (req, res) => {
 
 app.post('/api/upload', upload.single('image'), async (req, res) => {
     try {
-        var obj = {
+        const obj = {
             name: req.body.name,
             desc: req.body.desc,
             img: {
@@ -60,7 +61,7 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
     }
 });
 
-var port = process.env.PORT || 5000;
+
 app.listen(port, err => {
     if (err) {
         throw err;
