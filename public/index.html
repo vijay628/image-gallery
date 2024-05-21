@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Uploading</title>
+</head>
+<body>
+    <h1>To Upload Image on MongoDB</h1>
+    <hr />
+    <div>
+        <form action="/api/upload" method="POST" enctype="multipart/form-data">
+            <div>
+                <label for="name">Image Title</label>
+                <input type="text" id="name" placeholder="Name" name="name" required />
+            </div>
+            <div>
+                <label for="desc">Image Description</label>
+                <textarea id="desc" name="desc" rows="2" placeholder="Description" required></textarea>
+            </div>
+            <div>
+                <label for="image">Upload Image</label>
+                <input type="file" id="image" name="image" required />
+            </div>
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <hr />
+
+    <h1>Uploaded Images</h1>
+    <div id="images"></div>
+
+    <script>
+        async function fetchImages() {
+            try {
+                const response = await fetch('/api/images');
+                const images = await response.json();
+
+                const imagesContainer = document.getElementById('images');
+                imagesContainer.innerHTML = '';
+
+                images.forEach(image => {
+                    const imageElement = document.createElement('div');
+                    imageElement.innerHTML = `
+                        <div>
+                            <img src="data:${image.img.contentType};base64,${arrayBufferToBase64(image.img.data.data)}" alt="${image.name}" />
+                            <div>
+                                <h5>${image.name}</h5>
+                                <p>${image.desc}</p>
+                            </div>
+                        </div>
+                    `;
+                    imagesContainer.appendChild(imageElement);
+                });
+            } catch (error) {
+                console.error('Error fetching images:', error);
+            }
+        }
+
+        function arrayBufferToBase64(buffer) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+            const len = bytes.byteLength;
+            for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+
+        // Fetch images on page load
+        document.addEventListener('DOMContentLoaded', fetchImages);
+    </script>
+</body>
+</html>

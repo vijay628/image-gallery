@@ -6,12 +6,13 @@ const bodyParser = require('body-parser');
 const imgSchema = require('./model/model.js');
 const fs = require('fs');
 const path = require('path');
-app.set("view engine", "ejs");
 
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(express.static('public'));
 
 const multer = require('multer');
 
