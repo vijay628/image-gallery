@@ -43,7 +43,6 @@ app.get('/api/images', async (req, res) => {
 app.post('/api/upload', upload.single('image'), async (req, res) => {
     try {
         const obj = {
-            name: req.body.name,
             desc: req.body.desc,
             img: {
                 data: fs.readFileSync(path.join(__dirname, '/uploads/', req.file.filename)),
